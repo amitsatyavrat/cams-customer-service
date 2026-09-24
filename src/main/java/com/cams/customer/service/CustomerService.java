@@ -3,6 +3,7 @@ package com.cams.customer.service;
 import com.cams.customer.dto.CustomerRequest;
 import com.cams.customer.dto.CustomerResponse;
 import com.cams.customer.entity.Customer;
+import com.cams.customer.exception.DuplicateResourceException;
 import com.cams.customer.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +23,16 @@ public class CustomerService {
         if (customerRepository.existsByCustomerNumber(
                 request.getCustomerNumber())) {
 
-            throw new RuntimeException("Customer number already exists");
+            throw new DuplicateResourceException(
+                    "Customer number already exists: "
+                            + request.getCustomerNumber());
         }
 
         if (customerRepository.existsByEmail(request.getEmail())) {
 
-            throw new RuntimeException("Email already exists");
+            throw new DuplicateResourceException(
+                    "Email already exists: "
+                            + request.getEmail());
         }
 
         Customer customer = new Customer(
