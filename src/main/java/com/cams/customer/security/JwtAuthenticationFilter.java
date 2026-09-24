@@ -66,6 +66,13 @@ public class JwtAuthenticationFilter
                 SecurityContextHolder
                         .getContext()
                         .setAuthentication(authentication);
+
+                System.out.println(
+                        "Authenticated user = "
+                                + username
+                                + ", authority = "
+                                + authentication.getAuthorities()
+                );
             }
 
         } catch (Exception e) {
