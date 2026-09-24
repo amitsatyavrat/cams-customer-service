@@ -69,6 +69,11 @@ public class JwtAuthenticationFilter
             }
 
         } catch (Exception e) {
+            System.out.println(
+                    "JWT validation failed: " +
+                            e.getClass().getSimpleName() +
+                            " - " +
+                            e.getMessage());
 
             SecurityContextHolder.clearContext();
         }
