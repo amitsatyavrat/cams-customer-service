@@ -3,6 +3,7 @@ package com.cams.customer.service;
 import com.cams.customer.dto.CustomerRequest;
 import com.cams.customer.dto.CustomerResponse;
 import com.cams.customer.entity.Customer;
+import com.cams.customer.exception.CustomerNotFoundException;
 import com.cams.customer.exception.DuplicateResourceException;
 import com.cams.customer.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,7 @@ public class CustomerService {
 
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new CustomerNotFoundException(
                                 "Customer not found: " + id));
 
         return mapToResponse(customer);
