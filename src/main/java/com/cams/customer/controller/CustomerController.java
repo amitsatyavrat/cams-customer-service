@@ -3,6 +3,7 @@ package com.cams.customer.controller;
 import com.cams.customer.dto.CustomerRequest;
 import com.cams.customer.dto.CustomerResponse;
 import com.cams.customer.service.CustomerService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/customers")
+@SecurityRequirement(name = "bearerAuth")
 public class CustomerController {
 
     private final CustomerService customerService;
