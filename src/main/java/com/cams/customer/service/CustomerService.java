@@ -10,8 +10,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class CustomerService {
+
+    private static final Logger log =
+            LoggerFactory.getLogger(CustomerService.class);
 
     private final CustomerRepository customerRepository;
 
@@ -21,8 +27,18 @@ public class CustomerService {
 
     public CustomerResponse createCustomer(CustomerRequest request) {
 
+        log.info(
+                "Creating customer with customerNumber={}",
+                request.getCustomerNumber()
+        );
+
         if (customerRepository.existsByCustomerNumber(
                 request.getCustomerNumber())) {
+
+            log.warn(
+                    "Customer creation failed. Customer number already exists: {}",
+                    request.getCustomerNumber()
+            );
 
             throw new DuplicateResourceException(
                     "Customer number already exists: "
@@ -30,6 +46,11 @@ public class CustomerService {
         }
 
         if (customerRepository.existsByEmail(request.getEmail())) {
+
+            log.warn(
+                    "Customer creation failed. Customer email already exists: {}",
+                    request.getCustomerNumber()
+            );
 
             throw new DuplicateResourceException(
                     "Email already exists: "
@@ -48,15 +69,29 @@ public class CustomerService {
         Customer savedCustomer =
                 customerRepository.save(customer);
 
+        log.info(
+                "Customer created successfully. customerNumber={}",
+                savedCustomer.getCustomerNumber()
+        );
+
         return mapToResponse(savedCustomer);
     }
 
     public CustomerResponse getCustomer(Long id) {
 
+        log.info("Fetching customer id={}", id);
+
         Customer customer = customerRepository.findById(id)
-                .orElseThrow(() ->
-                        new CustomerNotFoundException(
-                                "Customer not found: " + id));
+                .orElseThrow(() -> {
+                    log.warn("Customer not found id={}", id);
+                    return new CustomerNotFoundException(
+                            "Customer not found: " + id);
+                });
+
+        log.info(
+                "Customer fetched successfully id={}",
+                id
+        );
 
         return mapToResponse(customer);
     }
