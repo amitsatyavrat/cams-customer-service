@@ -110,7 +110,7 @@ public class CustomerService {
 
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new CustomerNotFoundException(
                                 "Customer not found: " + id));
 
         customer.setFirstName(request.getFirstName());
@@ -128,7 +128,7 @@ public class CustomerService {
 
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new CustomerNotFoundException(
                                 "Customer not found: " + id));
 
         customerRepository.delete(customer);
